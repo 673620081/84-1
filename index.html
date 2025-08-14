@@ -290,9 +290,7 @@
 
     <!-- 标题下、媒体上 自定义文本框 -->
     <div class="custom-text">
-      <p>
-        后面有图包下载,解压密码：556677 耐心等待加载几分钟
-      </p>
+      <p>后面有图包下载,解压密码：556677 耐心等待加载几分钟</p>
     </div>
 
     <main id="main" class="wrap">
@@ -314,7 +312,7 @@
         >
       </section>
 
-      <h3 class="next-issue__title">上一期↓↓</h3>
+      <h3 class="next-issue__title">下一期↓↓</h3>
 
       <section class="bottom-cta" aria-label="添加好友获取更新">
         <a
@@ -332,11 +330,7 @@
     <!-- 底部可点击图片（外链） -->
     <h3 class="next-issue__title">点击图片或扫码加群↓↓</h3>
     <div class="footer-qrcode">
-      <a
-        href="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAJ_ymicm2kPiVJxH9Vizn-oz4NJ6praAAJRGAACSijoVKRP1AABRC3LdDYE.jpg"
-        target="_blank"
-        rel="noopener"
-      >
+      <a href="https://qm.qq.com/q/NN5UyBdd2A" target="_blank" rel="noopener">
         <img
           src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAJ_ymicm2kPiVJxH9Vizn-oz4NJ6praAAJRGAACSijoVKRP1AABRC3LdDYE.jpg"
           alt=""
@@ -761,31 +755,6 @@
       let filtered = [];
       let isLoading = false;
 
-      // —— 顺序加载图片（队列）——
-      let imgQueue = [];
-      let imgLoading = false;
-      function enqueueImage(imgEl) {
-        imgQueue.push(imgEl);
-        if (!imgLoading) loadNextImage();
-      }
-      function loadNextImage() {
-        if (imgQueue.length === 0) {
-          imgLoading = false;
-          return;
-        }
-        imgLoading = true;
-        const img = imgQueue.shift();
-        function done() {
-          img.removeEventListener("load", done);
-          img.removeEventListener("error", done);
-          loadNextImage();
-        }
-        img.loading = "eager";
-        img.addEventListener("load", done, { once: true });
-        img.addEventListener("error", done, { once: true });
-        img.src = img.dataset.src;
-        img.removeAttribute("data-src");
-      }
       function getThumbSrc(item) {
         if (item.thumb) return item.thumb;
         if (/^https?:\/\//i.test(item.src)) return item.src;
@@ -825,12 +794,11 @@
             wrap.className = "thumb-wrap";
             const img = document.createElement("img");
             img.className = "thumb";
-            img.setAttribute("data-src", getThumbSrc(item));
+            img.src = getThumbSrc(item);
             img.decoding = "async";
             img.alt = item.title || "媒体预览";
             wrap.appendChild(img);
             card.appendChild(wrap);
-            enqueueImage(img); // 顺序加载
           }
           const meta = document.createElement("div");
           meta.className = "meta";
